@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>{{ object }}</h2>
+  {% if user.is_staff %}<div><a class="btn btn-outline-primary" href="{% url 'course_edit' object.pk %}">Edit</a>
+  <a class="btn btn-outline-danger" href="{% url 'course_delete' object.pk %}">Delete</a></div>{% endif %}
+</div>
+<p class="text-muted">{{ object.instructor|default:"TBA" }} · {{ object.credits }} credits · {{ object.seats_left }}/{{ object.capacity }} seats left</p>
+<p>{{ object.description }}</p>
+{% if user.is_staff %}
+<div class="card mb-3"><div class="card-header">Enrolled students</div>
+<table class="table mb-0 align-middle"><thead><tr><th>Student</th><th>Score</th><th>Grade</th><th></th></tr></thead><tbody>
+{% for e in enrollments %}<tr><td><a href="{{ e.student.get_absolute_url }}">{{ e.student }}</a></td>
+<td>{{ e.score|default_if_none:"—" }}</td><td>{{ e.letter }}</td>
+<td class="text-end">
+  <a class="btn btn-sm btn-outline-primary" href="{% url 'grade' e.pk %}">Grade</a>
+  <a class="btn btn-sm btn-outline-secondary" href="{% url 'attendance' e.pk %}">Attendance</a>
+  <form method="post" action="{% url 'unenroll' e.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Remove</button></form>
+</td></tr>
+{% empty %}<tr><td colspan="4" class="text-muted">No students enrolled.</td></tr>{% endfor %}
+</tbody></table></div>
+<form method="post" action="{% url 'admin_enroll' object.pk %}" class="input-group" style="max-width:500px">{% csrf_token %}
+  {{ enroll_form.student }}<button class="btn btn-primary">Enroll student</button>
+</form>
+{% endif %}
+{% endblock %}

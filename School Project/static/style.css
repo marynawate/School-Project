@@ -1,0 +1,4 @@
+.stat-card { border: 0; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.stat-card .num { font-size: 2.2rem; font-weight: 700; }
+.card { border-radius: .75rem; }
+.errorlist { color: #dc3545; list-style: none; padding: 0; margin: .25rem 0; font-size: .875rem; }

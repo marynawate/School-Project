@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>{{ object.full_name }}</h2>
+  {% if user.is_staff %}<div><a class="btn btn-outline-primary" href="{% url 'student_edit' object.pk %}">Edit</a>
+  <a class="btn btn-outline-danger" href="{% url 'student_delete' object.pk %}">Delete</a></div>{% endif %}
+</div>
+<div class="row g-3">
+<div class="col-md-5"><div class="card"><div class="card-body">
+  <dl class="row mb-0">
+    <dt class="col-5">Student ID</dt><dd class="col-7">{{ object.student_id }}</dd>
+    <dt class="col-5">Email</dt><dd class="col-7">{{ object.email }}</dd>
+    <dt class="col-5">Phone</dt><dd class="col-7">{{ object.phone|default:"—" }}</dd>
+    <dt class="col-5">Birth date</dt><dd class="col-7">{{ object.date_of_birth|default:"—" }}</dd>
+    <dt class="col-5">Gender</dt><dd class="col-7">{{ object.get_gender_display|default:"—" }}</dd>
+    <dt class="col-5">Address</dt><dd class="col-7">{{ object.address|default:"—" }}</dd>
+    <dt class="col-5">Program</dt><dd class="col-7">{{ object.program|default:"—" }}</dd>
+    <dt class="col-5">Year</dt><dd class="col-7">{{ object.year_of_study }}</dd>
+    <dt class="col-5">GPA</dt><dd class="col-7">{{ object.gpa|default_if_none:"—" }}</dd>
+  </dl></div></div></div>
+<div class="col-md-7"><div class="card"><div class="card-header">Enrollments</div>
+<table class="table mb-0"><thead><tr><th>Course</th><th>Score</th><th>Grade</th>{% if user.is_staff %}<th></th>{% endif %}</tr></thead><tbody>
+{% for e in enrollments %}<tr><td>{{ e.course }}</td><td>{{ e.score|default_if_none:"—" }}</td><td>{{ e.letter }}</td>
+{% if user.is_staff %}<td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="{% url 'attendance' e.pk %}">Attendance</a></td>{% endif %}</tr>
+{% empty %}<tr><td colspan="4" class="text-muted">No enrollments.</td></tr>{% endfor %}
+</tbody></table></div></div>
+</div>
+{% endblock %}

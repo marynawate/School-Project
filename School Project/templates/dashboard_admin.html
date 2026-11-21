@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3 mb-4">
+  <div class="col-md-3"><div class="card stat-card p-3"><div class="text-muted">Active students</div><div class="num">{{ student_count }}</div></div></div>
+  <div class="col-md-3"><div class="card stat-card p-3"><div class="text-muted">Courses</div><div class="num">{{ course_count }}</div></div></div>
+  <div class="col-md-3"><div class="card stat-card p-3"><div class="text-muted">Enrollments</div><div class="num">{{ enrollment_count }}</div></div></div>
+  <div class="col-md-3"><div class="card stat-card p-3"><div class="text-muted">Average score</div><div class="num">{{ avg_score|default_if_none:"—"|floatformat:1 }}</div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6"><div class="card"><div class="card-header">Most popular courses</div>
+    <ul class="list-group list-group-flush">{% for c in popular %}
+      <li class="list-group-item d-flex justify-content-between"><a href="{{ c.get_absolute_url }}">{{ c }}</a><span class="badge bg-primary">{{ c.n }}</span></li>
+    {% empty %}<li class="list-group-item text-muted">No courses yet.</li>{% endfor %}</ul></div></div>
+  <div class="col-md-6"><div class="card"><div class="card-header">Recently added students</div>
+    <ul class="list-group list-group-flush">{% for s in recent %}
+      <li class="list-group-item"><a href="{{ s.get_absolute_url }}">{{ s }}</a></li>
+    {% empty %}<li class="list-group-item text-muted">No students yet.</li>{% endfor %}</ul></div></div>
+</div>
+<div class="mt-4"><a class="btn btn-primary" href="{% url 'student_add' %}">+ Add student</a>
+<a class="btn btn-outline-primary" href="{% url 'course_add' %}">+ Add course</a></div>
+{% endblock %}
